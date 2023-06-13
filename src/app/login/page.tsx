@@ -1,5 +1,6 @@
 'use client'
 import { FormEvent, useState } from 'react'
+import { startAuthentication } from '@simplewebauthn/browser';
 
 export default function Login(){
 
@@ -12,6 +13,31 @@ export default function Login(){
     
     try {
 
+      const formData = new FormData(e.target as HTMLFormElement)
+      const email = formData.get('email')
+
+      const { data: loginOpts } = await (await fetch(
+        '/api/pre-login', 
+        { 
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email }) 
+        })
+      ).json()
+
+      const credential = await startAuthentication(loginOpts)
+
+      await (await fetch(
+        '/api/login', 
+        { 
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ credential, email }) 
+        })
+      ).json()
+
+
+      location.href = '/'
 
     } catch(err) {
       console.log('err: ', err)

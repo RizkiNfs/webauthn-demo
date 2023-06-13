@@ -22,8 +22,8 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr>
+          {data.map((item, idx) => (
+            <tr key={idx}>
               <td className="bg-slate-900 border-b p-4 text-center">{item.email}</td>
               <td className="bg-slate-900 border-b p-4 text-center">{item.name}</td>
               <td className="bg-slate-900 border-b p-4 text-center">{item.hobby}</td>
